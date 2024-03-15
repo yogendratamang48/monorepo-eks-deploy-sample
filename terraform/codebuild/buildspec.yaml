@@ -1,9 +1,20 @@
 version: 0.2
-
+batch:
+  fast-fail: false
+  build-list:
+    - identifier: ping
+      env:
+        variables:
+          IMAGE_REPO_NAME: simple-ping
+    - identifier: pong
+      env:
+        variables:
+          APP_DIR: pong
+          IMAGE_REPO_NAME: simple-pong
 phases:
   build:
     commands:
-      - cd ping
+      - cd $APP_DIR
       - echo "Building Ping Application"
       - echo Logging in to Amazon ECR...
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
@@ -14,3 +25,4 @@ phases:
       - echo Building the Docker image...
       - docker build -t $IMAGE_REPO_NAME:$IMAGE_TAG .
       - docker tag $IMAGE_REPO_NAME:$IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
+      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG

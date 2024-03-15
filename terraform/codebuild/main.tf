@@ -1,9 +1,14 @@
 locals {
   application_name = "simple-ping"
+  ecr_names = [
+    "simple-ping",
+    "simple-pong"
+  ]
   repository_name = "simple-mono-repo"
   repository_url   = "730335205732.dkr.ecr.us-east-1.amazonaws.com/simple-ping"
   build_image      = "aws/codebuild/amazonlinux2-x86_64-standard:5.0"
 }
+
 resource "aws_codebuild_project" "this" {
   name                   = local.application_name
   service_role           = aws_iam_role.codebuild.arn
@@ -15,10 +20,6 @@ resource "aws_codebuild_project" "this" {
     compute_type                = "BUILD_GENERAL1_SMALL"
     # image_pull_credentials_type = "SERVICE_ROLE"
     privileged_mode             = false
-    environment_variable {
-      name  = "IMAGE_REPO_NAME"
-      value = "simple-ping"
-    }
     environment_variable {
       name  = "AWS_ACCOUNT_ID"
       value = "730335205732"
