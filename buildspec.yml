@@ -1,13 +1,15 @@
 version: 0.2
 batch:
-  fast-fail: false
   build-list:
     - identifier: ping
       env:
+        compute-type: BUILD_GENERAL1_SMALL
         variables:
+          APP_DIR: ping
           IMAGE_REPO_NAME: simple-ping
     - identifier: pong
       env:
+        compute-type: BUILD_GENERAL1_SMALL
         variables:
           APP_DIR: pong
           IMAGE_REPO_NAME: simple-pong
