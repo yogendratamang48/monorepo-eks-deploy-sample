@@ -52,6 +52,7 @@ resource "aws_codepipeline" "this" {
       input_artifacts  = ["SOURCE_ARTIFACT"]
       configuration = {
         ProjectName = aws_codebuild_project.this.name
+        BatchEnabled = true
       }
     }
   }
