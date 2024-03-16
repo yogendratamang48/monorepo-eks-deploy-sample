@@ -42,7 +42,7 @@ resource "aws_codebuild_project" "this" {
     privileged_mode             = false
     environment_variable {
       name  = "AWS_ACCOUNT_ID"
-      value = "533267077104"
+      value = local.account_id
     }
     environment_variable {
       name  = "AWS_DEFAULT_REGION"
@@ -61,7 +61,7 @@ resource "aws_codebuild_project" "this" {
 
   source {
     type      = "CODEPIPELINE"
-    # buildspec = file("${path.module}/buildspec.yaml")
+    buildspec = "${path.module}/buildspec_build.yml"
   }
 
   logs_config {
