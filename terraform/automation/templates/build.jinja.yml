@@ -3,7 +3,7 @@ version: 0.2
 batch:
   fast-fail: false
   build-list:
-{% for service in services -%}
+{%- for service in services %}
     - identifier: BuildDocker-{{ service["name"] }}
       env:
         variables:
@@ -11,7 +11,7 @@ batch:
           APP_DIR: {{ service["name"] }}
           IMAGE_REPO_NAME: {{ service["name"] }}
       ignore-failure: true
-{% endfor %}
+{% endfor -%}
 
 phases:
   pre_build:

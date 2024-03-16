@@ -1,0 +1,63 @@
+version: 0.2
+
+batch:
+  fast-fail: false
+  build-list:
+
+    - identifier: Deploy-evtpay-payment-system
+      env:
+        variables:
+          SERVICE_NAME: evtpay-payment-system
+      ignore-failure: true
+
+    - identifier: Deploy-evtpay-admin-api
+      env:
+        variables:
+          SERVICE_NAME: evtpay-admin-api
+      ignore-failure: true
+
+    - identifier: Deploy-evtpay-api-gateway
+      env:
+        variables:
+          SERVICE_NAME: evtpay-api-gateway
+      ignore-failure: true
+
+    - identifier: Deploy-evtpay-auth-provider
+      env:
+        variables:
+          SERVICE_NAME: evtpay-auth-provider
+      ignore-failure: true
+
+    - identifier: Deploy-evtpay-config-server
+      env:
+        variables:
+          SERVICE_NAME: evtpay-config-server
+      ignore-failure: true
+
+    - identifier: Deploy-evtpay-crm
+      env:
+        variables:
+          SERVICE_NAME: evtpay-crm
+      ignore-failure: true
+
+    - identifier: Deploy-evtpay-payment-system
+      env:
+        variables:
+          SERVICE_NAME: evtpay-payment-system
+      ignore-failure: true
+
+    - identifier: Deploy-evtpay-wallet
+      env:
+        variables:
+          SERVICE_NAME: evtpay-wallet
+      ignore-failure: true
+
+
+phases:
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
+  build:
+    commands:
+      - echo This is a deploy job to $SERVICE_NAME
