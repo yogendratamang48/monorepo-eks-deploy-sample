@@ -1,0 +1,37 @@
+version: 0.2
+
+batch:
+  fast-fail: false
+  build-list:
+    - identifier: BuildPingDocker
+      env:
+        variables:
+          APP_DIR: ping
+          IMAGE_REPO_NAME: simple-ping
+      ignore-failure: false
+    - identifier: BuildPongDocker
+      env:
+        variables:
+          APP_DIR: pong
+          IMAGE_REPO_NAME: simple-pong
+      ignore-failure: true
+
+phases:
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
+  build:
+    commands:
+      - cd $APP_DIR
+      - echo "Building Ping Application"
+      - echo Build started on `date`
+      - echo $CODEBUILD_RESOLVED_SOURCE_VERSION
+      - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+      - IMAGE_TAG=${COMMIT_HASH:=latest}
+      - echo Building the Docker image...
+      - docker build -t $IMAGE_REPO_NAME:$IMAGE_TAG .
+      - docker tag $IMAGE_REPO_NAME:$IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
+  post_build:
+    commands:
+      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG

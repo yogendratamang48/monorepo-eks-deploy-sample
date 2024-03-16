@@ -63,7 +63,7 @@ data "aws_iam_policy_document" "s3" {
     condition {
       test     = "ArnEquals"
       variable = "AWS:SourceArn"
-      values   = [aws_codepipeline.this.arn, aws_codebuild_project.this.arn]
+      values   = [aws_codepipeline.this.arn, aws_codebuild_project.build.arn]
     }
   }
 }

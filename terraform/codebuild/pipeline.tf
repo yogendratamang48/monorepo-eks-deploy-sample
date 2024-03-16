@@ -51,7 +51,7 @@ resource "aws_codepipeline" "this" {
       run_order        = 2
       input_artifacts  = ["SOURCE_ARTIFACT"]
       configuration = {
-        ProjectName = aws_codebuild_project.this.name
+        ProjectName = aws_codebuild_project.build.name
         BatchEnabled = true
       }
     }
@@ -131,7 +131,10 @@ data "aws_iam_policy_document" "codepipeline" {
     actions = [
       "codebuild:*",
     ]
-    resources = [aws_codebuild_project.this.arn]
+    resources = [
+      aws_codebuild_project.build.arn,
+      aws_codebuild_project.deploy.arn,
+      ]
   }
 
   statement {
