@@ -1,0 +1,9 @@
+services:
+  - name: evtpay-payment-system
+  - name: evtpay-admin-api
+  - name: evtpay-api-gateway
+  - name: evtpay-auth-provider
+  - name: evtpay-config-server
+  - name: evtpay-crm
+  - name: evtpay-payment-system
+  - name: evtpay-wallet
