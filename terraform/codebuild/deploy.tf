@@ -27,7 +27,7 @@ resource "aws_codebuild_project" "deploy" {
 
   source {
     type      = "CODEPIPELINE"
-    buildspec = file("${path.module}/buildspecs/buildspec_deploy.yml")
+    buildspec = file("${path.module}/buildspecs/deploy.yml")
   }
 
   logs_config {
