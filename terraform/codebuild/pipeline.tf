@@ -41,7 +41,7 @@ resource "aws_codepipeline" "this" {
   }
 
   stage {
-    name = "BuildPingImage"
+    name = "BuildDockerImages"
     action {
       name             = "Build"
       category         = "Build"
@@ -52,6 +52,23 @@ resource "aws_codepipeline" "this" {
       input_artifacts  = ["SOURCE_ARTIFACT"]
       configuration = {
         ProjectName = aws_codebuild_project.this.name
+        BatchEnabled = true
+      }
+    }
+  }
+
+  stage {
+    name = "DeployToEKS"
+    action {
+      name             = "Deploy"
+      category         = "Build"
+      owner            = "AWS"
+      provider         = "CodeBuild"
+      version          = "1"
+      run_order        = 2
+      input_artifacts  = ["SOURCE_ARTIFACT"]
+      configuration = {
+        ProjectName = aws_codebuild_project.deploy.name
         BatchEnabled = true
       }
     }
