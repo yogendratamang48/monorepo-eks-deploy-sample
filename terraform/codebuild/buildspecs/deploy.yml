@@ -1,0 +1,26 @@
+version: 0.2
+
+batch:
+  fast-fail: false
+  build-list:
+    - identifier: DeployPingService
+      env:
+        variables:
+          IMAGE_REPO_NAME: simple-ping
+          SERVICE_NAME: ping-service
+      ignore-failure: false
+    - identifier: DeployPongService
+      env:
+        variables:
+          IMAGE_REPO_NAME: simple-pong
+          SERVICE_NAME: pong-service
+      ignore-failure: true
+
+phases:
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
+  build:
+    commands:
+      - echo This is a deploy job to $APP_DIR
