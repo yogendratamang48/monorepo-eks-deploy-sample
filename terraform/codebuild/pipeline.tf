@@ -112,8 +112,7 @@ data "aws_iam_policy_document" "codepipeline" {
   statement {
     sid = "codebuildaccess"
     actions = [
-      "codebuild:BatchGetBuilds",
-      "codebuild:StartBuild"
+      "codebuild:*",
     ]
     resources = [aws_codebuild_project.this.arn]
   }
